@@ -9,10 +9,8 @@ from pygame.sprite import Group
 def run_game():
     pygame.init()
     ai_settings = Settings()
-    screen = pygame.display.set_mode((1200, 800))
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
-    pygame.display.set_caption("Alien Invasion")
-    bg_color = (ai_settings.bg_color)
+    pygame.display.set_caption(ai_settings.window_name)
     ship = Ship(ai_settings, screen)
     bullets = Group()
     while True:
