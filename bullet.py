@@ -14,6 +14,8 @@ class Bullet(Sprite):
         self.y = float(self.rect.y)
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
+        self.damage = 51
+        self.penetration = 1
 
     def update(self):
         self.y -= self.speed_factor
@@ -21,3 +23,6 @@ class Bullet(Sprite):
 
     def draw_bullet(self):
         pygame.draw.rect(self.screen, self.color, self.rect)
+
+    def how_much_dmg(self):
+        return self.damage

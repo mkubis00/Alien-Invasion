@@ -14,6 +14,9 @@ class Alien(Sprite):
         self.rect.y = self.rect.height
         # Store the alien's exact position.
         self.x = float(self.rect.x)
+        #MORE
+        self.health = 52
+
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
@@ -28,3 +31,9 @@ class Alien(Sprite):
             return True
         elif self.rect.left <= 0:
             return True
+
+    def get_health(self):
+        return self.health
+
+    def get_hit(self, bullet):
+        self.health -= bullet.how_much_dmg()
