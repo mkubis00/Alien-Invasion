@@ -1,9 +1,14 @@
 import sys
 import pygame
+import random
 from time import sleep
 
 from bullet import Bullet
 from alien import Alien
+from fighter import Fighter
+from qheavy import Qheavy
+from mheavy import Mheavy
+
 
 def check_events(ai_settings, screen, stats, play_button, ship, aliens, bullets):
     for event in pygame.event.get():
@@ -67,15 +72,14 @@ def colision_operator(aliens, bullets, stats, sb, ai_settings):
     for bullet in bullets:
         b = pygame.sprite.spritecollide(bullet, aliens, False)
         if b:
-            print(b[0].get_health())
+            #print(b[0].get_health())
             b[0].get_hit(bullet)
             pygame.sprite.groupcollide(bullets, aliens, True, False)
-            print(b[0].get_health())
-            if b[0].get_health() <= 0:
+            #print(b[0].get_health())
+            if b[0].hp <= 0:
                 aliens.remove((b[0]))
                 stats.score += ai_settings.alien_points * len(aliens)
                 sb.prep_score()
-
 
 def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
@@ -83,21 +87,37 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         bullets.add(new_bullet)
 
 def create_fleet(ai_settings, screen, ship, aliens):
-    alien = Alien(ai_settings, screen)
+    alien = Fighter(ai_settings, screen)
     number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
     number_rows = get_number_rows(ai_settings, ship.rect.height, alien.rect.height)
+    tab = ai_settings.tab[:]
     for row_number in range(number_rows):
         for alien_number in range(number_aliens_x):
             # Create an alien and place it in the row.
-            create_alien(ai_settings, screen, aliens, alien_number, row_number)
-
-def create_alien(ai_settings, screen, aliens, alien_number, row_number):
-    alien = Alien(ai_settings, screen)
+            create_alien(ai_settings, screen, aliens, alien_number, row_number, tab)
+    tab.clear()
+            
+def create_alien(ai_settings, screen, aliens, alien_number, row_number, tab):
+    #alien = Alien(ai_settings, screen)
+    alien = choose_alien(ai_settings, screen, tab)
     alien_width = alien.rect.width
     alien.x = alien_width + 2 * alien_width * alien_number
     alien.rect.x = alien.x
     alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
     aliens.add(alien)
+
+def choose_alien(ai_settings, screen, tab):
+    while True:
+        if random.choice(tab) == tab[0]:
+            if tab[0] > 0:
+                tab[0] -= 1
+                return Qheavy(ai_settings, screen)
+        elif random.choice(tab) == tab[1]:
+            if tab[1] > 0:
+                tab[1] -= 1
+                return Mheavy(ai_settings, screen)
+        else:
+            return Fighter(ai_settings, screen)
 
 def get_number_aliens_x(ai_settings, alien_width):
     available_space_x = ai_settings.screen_width - 2 * alien_width

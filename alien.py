@@ -1,13 +1,14 @@
 import pygame
 from pygame.sprite import Sprite
+from abc import ABC, abstractmethod
 
-class Alien(Sprite):
+class Alien(Sprite, ABC):
+    @abstractmethod
     def __init__(self, ai_settings, screen):
         super(Alien, self).__init__()
         self.screen = screen
         self.ai_settings = ai_settings
         # Load the alien image and set its rect attribute.
-        self.image = pygame.image.load('images/alien.bmp')
         self.rect = self.image.get_rect()
         # Start each new alien near the top left of the screen.
         self.rect.x = self.rect.width
@@ -15,8 +16,12 @@ class Alien(Sprite):
         # Store the alien's exact position.
         self.x = float(self.rect.x)
         #MORE
-        self.health = 52
+        self.health = ai_settings.alien_basic_health
+        self.armor_plate = ai_settings.armor_plate
+        self.hp = self.computing_hp()
 
+    def computing_hp(self):
+         return self.health
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)
@@ -31,9 +36,6 @@ class Alien(Sprite):
             return True
         elif self.rect.left <= 0:
             return True
-
-    def get_health(self):
-        return self.health
 
     def get_hit(self, bullet):
         self.health -= bullet.how_much_dmg()

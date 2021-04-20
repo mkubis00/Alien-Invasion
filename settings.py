@@ -19,8 +19,12 @@ class Settings():
         self.alien_speed_factor = 0.2
         self.fleet_drop_speed = 1
         self.alien_basic_health = 50
+        self.armor = 25
+        self.armor_plate = 10
         # fleet_direction of 1 represents right; -1 represents left.
         self.fleet_direction = 1
+
+        self.tab = [8, 8, 20 , 20, 20]
 
         self.speedup_scale = 1.1
         self.score_scale = 1.5
