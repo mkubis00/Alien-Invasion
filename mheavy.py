@@ -4,8 +4,9 @@ from alien_heavy import Alien_heavy
 
 class Mheavy(Alien_heavy):
     def __init__(self, ai_settings, screen):
-        super().__init__(ai_settings, screen)
         self.image = pygame.image.load('images/mh.bmp')
+        super().__init__(ai_settings, screen)
+        
 
     def computing_hp(self):
         return int((self.health + self.armor_plate) * 0.3 * self.armor)
